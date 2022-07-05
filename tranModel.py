@@ -46,7 +46,8 @@ class dataOfMe(Dataset):
         img = cv2.imread('./parise/'+self.info[item])
         if self.fun != None:
             img = self.fun(img)
-        target = self.info[item].replace('.png','')
+
+        target = self.info[item].replace('_','.').split('.')[0]
         if len(target) < self.lenYzm:
             target += '@'*(self.lenYzm-len(target))
         target = self.getLable2(target)
@@ -89,26 +90,25 @@ def train(batch_size=20,tranL=1,model=None):
     info2 = []
     data = os.listdir('./parise')
     random.shuffle(data)
-    number = data[200:]
-    number2 = data[:200]
+    number = data[numberOfp:]
+    number2 = data[:numberOfp]
     yzmLen = 0
     koyzmFu = '@'
 
     data = set('')
     for i in number2:
-        if i.find('.png') != -1:
+        if i.replace('_','.').split('.')[0] != -1:
             info2.append(i)
-            for s in i.replace('.png', ''):
+            for s in i.replace('_','.').split('.')[0]:
                 data.add(s)
 
 
     for i in number:
-        if i.find('.png') != -1:
+        if i.replace('_','.').split('.')[0] != -1:
             info.append(i)
-            if len(i.replace('.png', '')) > yzmLen:
-                yzmLen = len(i.replace('.png', ''))
-            for s in i.replace('.png', ''):
-
+            if len(i.replace('_','.').split('.')[0]) > yzmLen:
+                yzmLen = len(i.replace('_','.').split('.')[0])
+            for s in i.replace('_','.').split('.')[0]:
                 data.add(s)
 
     lableList = list(data)
@@ -147,7 +147,7 @@ def train(batch_size=20,tranL=1,model=None):
             ff.set_postfix(loss=result_loss.item(),cbb=i+1)
             lossMe += result_loss.item()
         print()
-        print("\r平均损失："+str(lossMe/zs))
+        print("\n平均损失："+str(lossMe/zs))
         zq = 0
         yg = 0
         ff2 = tqdm(ff2, total=len(ff2), desc="测试数据进度")
@@ -191,9 +191,11 @@ if __name__ == '__main__':
     batch_size = 20
      # tranL设置训练多少轮
     tranL = 10
+     # numberOfp设置测试图片的数量
+    numberOfp = 200
      # model设置自己模型进行训练
     train(batch_size,tranL, model=None)
 
     # 下面是识别图片验证码的代码代码
-    # yzm = yuche("./parise/gabc.png")
+    # yzm = yuche("./parise/2n73f.png")
     # print(yzm)
