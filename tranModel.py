@@ -169,7 +169,7 @@ def train(batch_size=20,tranL=1,model=None):
 def yuche(data):
     with open('./ModelYZM/listLable.conf',encoding='utf-8') as f:
         lableList = json.loads(f.read())
-    ee = torch.load('./ModelYZM/model_name.pth')
+    ee = torch.load('./ModelYZM/modelyzm.pth')
     ee.to(device)
     y = getInfo(data)
     u = ee(y)
